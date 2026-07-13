@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Braden L. Crimmins</title>
+<meta name="description" content="Braden L. Crimmins — researcher in computer security and law. PhD in Computer Science (University of Michigan), JD (Stanford Law).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#13243B;
+    --ink-soft:#56616F;
+    --paper:#F1F2EF;
+    --paper-raised:#FBFBF9;
+    --mark:#16181A;
+    --verified:#1A7A4B;
+    --verified-deep:#125B37;
+    --verified-soft:#E2EFE8;
+    --line:#D7D9D2;
+    --line-soft:#E4E5DF;
+    --display:"Libre Franklin",system-ui,sans-serif;
+    --body:"Source Serif 4",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---- Signature: ballot timing-mark rail ---- */
+  .rail{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:38px;
+    background:var(--paper-raised);
+    border-right:1px solid var(--line);
+    z-index:50;
+  }
+  .rail::before{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    right:11px;
+    width:8px;
+    background:repeating-linear-gradient(
+      to bottom,
+      var(--mark) 0 5px,
+      transparent 5px 23px
+    );
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 32px 0 68px;
+  }
+
+  /* ---- Nav ---- */
+  .nav{
+    position:sticky;
+    top:0;
+    z-index:40;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav__inner{
+    max-width:920px;
+    margin:0 auto;
+    padding:14px 32px 14px 68px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .nav__name{
+    font-family:var(--display);
+    font-weight:800;
+    letter-spacing:-0.01em;
+    font-size:16px;
+    color:var(--ink);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .nav__links{
+    display:flex;
+    gap:22px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.02em;
+  }
+  .nav__links a{
+    color:var(--ink-soft);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1.5px solid transparent;
+    transition:color .18s ease, border-color .18s ease;
+  }
+  .nav__links a:hover,
+  .nav__links a:focus-visible{
+    color:var(--verified-deep);
+    border-color:var(--verified);
+  }
+
+  /* ---- Hero ---- */
+  .hero{
+    padding:78px 0 56px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--verified-deep);
+    margin:0 0 22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:30px;
+    height:1.5px;
+    background:var(--verified);
+  }
+  .hero h1{
+    font-family:var(--display);
+    font-weight:900;
+    font-size:clamp(42px,8vw,76px);
+    line-height:0.98;
+    letter-spacing:-0.03em;
+    margin:0 0 26px;
+    color:var(--ink);
+  }
+  .hero__lead{
+    font-size:clamp(20px,2.6vw,24px);
+    line-height:1.45;
+    max-width:75%;
+    margin:0 0 30px;
+    color:var(--ink);
+  }
+  .hero__photo{
+    display:block;
+    width:360px;
+    height:360px;
+    object-fit:cover;
+    object-position:top center;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:var(--paper-raised);
+    margin:0 0 34px;
+    box-shadow:0 1px 0 var(--line-soft);
+  }
+  .hero__affil{
+    font-family:var(--mono);
+    font-size:13.5px;
+    line-height:1.9;
+    color:var(--ink-soft);
+    margin:0 0 34px;
+  }
+  .hero__affil strong{color:var(--ink);font-weight:600;}
+
+  /* marked-ballot ovals motif */
+  .ovals{display:block;margin:0 0 34px;}
+  .ovals svg{height:30px;width:auto;display:block;}
+  .oval-fill{fill:var(--verified);opacity:0;transform-origin:center;}
+  .oval-ring{fill:none;stroke:var(--ink);stroke-width:2;opacity:0.45;}
+  @keyframes mark-in{
+    from{opacity:0;transform:scale(0.4);}
+    to{opacity:1;transform:scale(1);}
+  }
+  .ovals .o1{animation:mark-in .5s ease .35s forwards;}
+  .ovals .o2{animation:mark-in .5s ease .65s forwards;}
+  .ovals .o3{animation:mark-in .5s ease .95s forwards;}
+
+  .marquee{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 14px;
+  }
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.01em;
+    color:var(--verified-deep);
+    background:var(--verified-soft);
+    border:1px solid color-mix(in srgb, var(--verified) 28%, transparent);
+    border-radius:2px;
+    padding:5px 11px;
+    line-height:1.3;
+  }
+  .tag .check{font-weight:600;}
+
+  /* ---- Sections ---- */
+  .section{
+    padding:56px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .section__head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin:0 0 38px;
+  }
+  .section__num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--verified-deep);
+    letter-spacing:0.04em;
+  }
+  .section__title{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(22px,3.4vw,28px);
+    letter-spacing:-0.01em;
+    margin:0;
+    color:var(--ink);
+  }
+
+  /* entry grid (research + experience) */
+  .entry{
+    display:grid;
+    grid-template-columns:1fr 7rem;
+    gap:6px 26px;
+    padding:24px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .entry:first-of-type{border-top:none;padding-top:0;}
+  .entry__period{
+    order:2;
+    text-align:right;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--ink-soft);
+    padding-top:5px;
+    letter-spacing:0.01em;
+  }
+  .entry__title{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:20px;
+    line-height:1.25;
+    letter-spacing:-0.005em;
+    margin:0 0 4px;
+    color:var(--ink);
+    position:relative;
+  }
+  /* indent the whole entry body so sub-text lines up with the title */
+  .entry > div:not(.entry__period){
+    padding-left:36px;
+  }
+  /* clickable ballot oval beside each entry — empty until marked */
+  .ballot{
+    position:absolute;
+    left:-36px;
+    top:0.28em;
+    width:24px;
+    height:15px;
+    padding:0;
+    border-radius:50%;
+    border:2px solid var(--ink);
+    background:transparent;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    transition:background .16s ease, opacity .16s ease;
+    opacity:0.55;
+  }
+  .ballot:hover{opacity:0.85;}
+  .ballot[aria-pressed="true"]{
+    background:var(--verified);
+    border-color:var(--verified-deep);
+    opacity:1;
+  }
+  .ballot:focus-visible{
+    outline:2px solid var(--verified);
+    outline-offset:3px;
+  }
+  .entry__role{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--verified-deep);
+    letter-spacing:0.02em;
+    margin:0 0 9px;
+  }
+  .entry__role strong{font-weight:600;color:var(--ink);}
+  .entry__role .venue{color:var(--ink-soft);}
+  .entry__desc{
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .entry__desc:last-child{margin-bottom:0;}
+  .entry__desc a{
+    color:var(--verified-deep);
+    text-decoration:none;
+    font-family:var(--mono);
+    font-size:0.92em;
+    border-bottom:1.5px solid var(--verified);
+    padding-bottom:1px;
+    transition:color .18s ease, border-color .18s ease;
+  }
+  .entry__desc a:hover,
+  .entry__desc a:focus-visible{
+    color:var(--ink);
+    border-color:var(--ink);
+  }
+  .entry__tags{display:flex;flex-wrap:wrap;gap:8px;}
+
+  /* education */
+  .edu{
+    padding:26px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .section__head + .edu{border-top:none;padding-top:0;}
+  .edu__top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    margin:0 0 4px;
+  }
+  .edu__school{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:22px;
+    letter-spacing:-0.01em;
+    margin:0;
+    color:var(--ink);
+  }
+  .edu__where{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .edu__degrees{
+    list-style:none;
+    margin:14px 0 16px;
+    padding:0;
+  }
+  .edu__degrees li{
+    position:relative;
+    padding-left:36px;
+    margin:0 0 9px;
+    line-height:1.4;
+  }
+  .edu__degrees .ballot{left:0;top:0.34em;}
+  .edu__degrees .gpa{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .honors{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .honors .pill{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink);
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:4px 9px;
+    line-height:1.3;
+  }
+
+  /* contact */
+  .contact{
+    padding:60px 0 96px;
+  }
+  .contact .eyebrow{margin-bottom:20px;}
+  .contact__title{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(26px,4.4vw,40px);
+    letter-spacing:-0.02em;
+    line-height:1.08;
+    margin:0 0 14px;
+    max-width:80%;
+    color:var(--ink);
+  }
+  .contact__sub{
+    font-size:18px;
+    line-height:1.5;
+    color:var(--ink-soft);
+    margin:0 0 32px;
+    max-width:65%;
+  }
+  /* email call to action with a standalone clickable ballot */
+  .contact__cta{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .contact__cta .ballot{
+    position:static;
+    flex:none;
+  }
+  .contact__mail{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(19px,2.6vw,25px);
+    letter-spacing:-0.01em;
+    color:var(--verified-deep);
+    text-decoration:none;
+    transition:color .18s ease;
+  }
+  .contact__mail .addr{
+    border-bottom:2px solid var(--verified);
+    padding-bottom:2px;
+  }
+  .contact__mail:hover,
+  .contact__mail:focus-visible{color:var(--ink);}
+  .contact__foot{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px 14px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:44px;
+    padding-top:20px;
+    border-top:1px solid var(--line-soft);
+    letter-spacing:0.02em;
+  }
+  .contact__loc{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:var(--ink);
+  }
+  .contact__loc::before{
+    content:"";
+    width:10px;
+    height:7px;
+    border-radius:50%;
+    background:var(--verified);
+  }
+  .contact__sep{color:var(--line);}
+
+  a:focus-visible{outline:2px solid var(--verified);outline-offset:3px;border-radius:1px;}
+
+  /* ---- Responsive ---- */
+  @media (max-width:680px){
+    body{font-size:17px;}
+    .rail{width:22px;}
+    .rail::before{right:6px;width:6px;}
+    .wrap{padding:0 22px 0 38px;}
+    .nav__inner{padding:12px 22px 12px 38px;}
+    .entry > div:not(.entry__period){padding-left:32px;}
+    .ballot{left:-32px;}
+    .nav__links{gap:15px;font-size:11.5px;}
+    .nav__name{font-size:14px;}
+    .entry{grid-template-columns:1fr;gap:8px;}
+    .entry__period{order:0;text-align:left;padding-top:0;}
+    .hero{padding:54px 0 44px;}
+  }
+  @media (max-width:430px){
+    .nav__links .opt{display:none;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .ovals .o1,.ovals .o2,.ovals .o3{animation:none;opacity:1;transform:none;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="rail" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <a class="nav__name" href="#top">Braden L. Crimmins</a>
+    <div class="nav__links">
+      <a href="#research">Research</a>
+      <a href="#experience" class="opt">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <header class="hero">
+    <p class="eyebrow">Law, Technology, and Security</p>
+    <!-- <h1>Braden L. Crimmins</h1> -->
+    <p class="hero__lead">I work at the intersection of law and technology. My research focuses on public-interest cybersecurity, especially concerning voting systems.</p>
+
+<img class="hero__photo" src="grad_photo.jpeg" alt="Braden L. Crimmins" width="440" height="440">
+
+    <p class="hero__affil">
+      <strong>University of Michigan</strong> — PhD, Computer Science (ongoing)<br>
+      <strong>Stanford Law School</strong> — JD, Law (conferred June 2026)
+    </p>
+
+    <div class="marquee">
+      <span class="tag"><span class="check">✓</span> Knight-Hennessy Scholar</span>
+      <span class="tag"><span class="check">✓</span> EVN 2026 Research Award</span>
+	<span class="tag"><span class="check">✓</span> U.Mich 2024 CSE Honors Competition — First Place</span>
+    </div>
+  </header>
+
+  <section class="section" id="research">
+    <div class="section__head">
+      <span class="section__num">01</span>
+      <h2 class="section__title">Research &amp; Writings</h2>
+    </div>
+
+    <article class="entry">
+      <div class="entry__period">Under Submission</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="false" aria-label="Mark this entry"></button>The Forgotten Paper Record Requirement of the Help America Vote Act</h3>
+        <p class="entry__role">Braden L. Crimmins</p>
+	<p class="entry__desc">Explaining that HAVA prohibits use of purely electronic voting systems, including Internet voting, in federal elections.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">Under Submission</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="false" aria-label="Mark this entry"></button>AI and the Coming Fourth Amendment Crisis</h3>
+        <p class="entry__role">Braden L. Crimmins</p>
+	<p class="entry__desc">Forecasting substantial challenges for Fourth Amendment doctrine posed by AI investigative tools.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">2024</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this entry"></button>DVSorder: Ballot Randomization Flaws Threaten Voter Privacy</h3>
+        <p class="entry__role"><strong>Braden L. Crimmins</strong>, Dhanya Y. Narayanan, Drew Springall, J. Alex Halderman <span class="venue">(USENIX Security)</span></p>
+        <p class="entry__desc">Identified and responsibly disclosed a vulnerability in voting machines used across 21 states. See <a href="https://dvsorder.org/">https://dvsorder.org/</a>.</p>
+        <div class="entry__tags">
+          <span class="tag"><span class="check">✓</span> Distinguished Paper Award</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">2024</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this entry"></button>Improving the Security of U.S. Elections with Robust Optimization</h3>
+        <p class="entry__role"><strong>Braden L. Crimmins</strong>, J. Alex Halderman, Bradley Sturt <span class="venue">(INFORMS 2025)</span></p>
+        <p class="entry__desc">Introduced a novel method for detecting voting-machine misconfigurations before elections.</p>
+        <div class="entry__tags">
+          <span class="tag"><span class="check">✓</span> Harvey J. Greenberg Research Award</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">2022</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this entry"></button>Logic and Accuracy Testing: A Fifty-State Review</h3>
+        <p class="entry__role">Josiah Walker, Nakul Bajaj, <strong>Braden L. Crimmins</strong>, J. Alex Halderman <span class="venue">(E-Vote-ID)</span></p>
+        <p class="entry__desc">Surveyed and documented the pre-election testing procedures used across all fifty states.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">2022</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this entry"></button>Towards Usable End-to-End Verification for Vote-by-Mail</h3>
+        <p class="entry__role"><strong>Braden L. Crimmins</strong>, Marshall Rhea, J. Alex Halderman <span class="venue">(Financial Cryptography 2022)</span></p>
+        <p class="entry__desc">Designed cryptographic voting systems that extend end-to-end verifiability to vote-by-mail.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="section__head">
+      <span class="section__num">02</span>
+      <h2 class="section__title">Experience</h2>
+    </div>
+
+    <article class="entry">
+      <div class="entry__period">2024—Present</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="false" aria-label="Mark this entry"></button>BallotIQ</h3>
+        <p class="entry__role">Co-Founder &amp; Manager</p>
+        <p class="entry__desc">Enabling better pre-election testing of voting equipment.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">2023—2025</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this entry"></button>Stanford Technology Law Review</h3>
+        <p class="entry__role">Editor-in-Chief · Formerly Lead Editor, Articles Editor, &amp; Member Editor</p>
+        <p class="entry__desc">Selected and edited articles for the Stanford Technology Law Review. Elected to serve as Editor-in-Chief.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__period">Summers '23 &amp; '24</div>
+      <div>
+        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this entry"></button>U.S. Department of Justice</h3>
+        <p class="entry__role">Office of Legal Policy Technology Fellow</p>
+        <p class="entry__desc">Served as the inaugural technology fellow in the Department of Justice.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="section" id="education">
+    <div class="section__head">
+      <span class="section__num">03</span>
+      <h2 class="section__title">Education &amp; Honors</h2>
+    </div>
+
+    <div class="edu">
+      <div class="edu__top">
+        <h3 class="edu__school">University of Michigan</h3>
+        <span class="edu__where">College of Engineering</span>
+      </div>
+      <ul class="edu__degrees">
+        <li><button class="ballot" type="button" aria-pressed="false" aria-label="Mark this degree"></button>PhD in Computer Science — public-interest cybersecurity <span class="gpa">(ongoing)</span></li>
+        <li><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this degree"></button>MSE in Computer Science — May 2023 <span class="gpa">· GPA 4.00/4.00</span></li>
+        <li><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this degree"></button>BSE in Computer Science — May 2022 <span class="gpa">· GPA 3.955/4.00</span></li>
+      </ul>
+      <div class="honors">
+        <span class="pill">Tauber Institute / Engineering Global Leadership Fellow</span>
+        <span class="pill">3× Dean's List</span>
+        <span class="pill">3× University Honors</span>
+        <span class="pill">Regents' Merit Scholar</span>
+        <span class="pill">Angel Scholar</span>
+        <span class="pill">Branstrom Prize</span>
+      </div>
+    </div>
+
+    <div class="edu">
+      <div class="edu__top">
+        <h3 class="edu__school">Stanford University</h3>
+        <span class="edu__where">Stanford Law School</span>
+      </div>
+      <ul class="edu__degrees">
+        <li><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this degree"></button>JD in Law — July 2026 <span class="gpa">· 16x honors grades</span></li>
+        <li><button class="ballot" type="button" aria-pressed="true" aria-label="Mark this item"></button>Knight-Hennessy Scholar</li>
+      </ul>
+      <div class="honors">
+        <span class="pill">Gerald Gunther Prize for Outstanding Performance (Property Law)</span>
+        <span class="pill">Gerald Gunther Prize for Outstanding Performance (Constitutional Law)</span>
+        <span class="pill">Judge Thelton E. Henderson Prize for Outstanding Performance (Julsgaard Clinic)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <p class="eyebrow">Contact</p>
+    <h2 class="contact__title">Let's talk.</h2>
+    <p class="contact__sub">Open to research collaboration, writing, and consulting — drop a line and I'll get back to you.</p>
+    <div class="contact__cta">
+      <button class="ballot" type="button" aria-pressed="true" aria-label="Mark this"></button>
+      <a class="contact__mail" href="mailto:bradenlc@umich.edu"><span class="addr">bradenlc@umich.edu</span></a>
+    </div>
+    <p class="contact__foot">
+      <span>Braden L. Crimmins</span>
+      <span class="contact__sep" aria-hidden="true">/</span>
+      <span class="contact__loc">Ann Arbor, Michigan</span>
+    </p>
+  </section>
+
+</main>
+
+<script>
+  document.querySelectorAll('.ballot').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var marked = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', marked ? 'false' : 'true');
+    });
+  });
+</script>
+
+</body>
+</html>

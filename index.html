@@ -382,54 +382,8 @@
     line-height:1.3;
   }
 
-  /* contact */
-  .contact{
-    padding:60px 0 96px;
-  }
-  .contact .eyebrow{margin-bottom:20px;}
-  .contact__title{
-    font-family:var(--display);
-    font-weight:800;
-    font-size:clamp(26px,4.4vw,40px);
-    letter-spacing:-0.02em;
-    line-height:1.08;
-    margin:0 0 14px;
-    max-width:80%;
-    color:var(--ink);
-  }
-  .contact__sub{
-    font-size:18px;
-    line-height:1.5;
-    color:var(--ink-soft);
-    margin:0 0 32px;
-    max-width:65%;
-  }
-  /* email call to action with a standalone clickable ballot */
-  .contact__cta{
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-  .contact__cta .ballot{
-    position:static;
-    flex:none;
-  }
-  .contact__mail{
-    font-family:var(--display);
-    font-weight:700;
-    font-size:clamp(19px,2.6vw,25px);
-    letter-spacing:-0.01em;
-    color:var(--verified-deep);
-    text-decoration:none;
-    transition:color .18s ease;
-  }
-  .contact__mail .addr{
-    border-bottom:2px solid var(--verified);
-    padding-bottom:2px;
-  }
-  .contact__mail:hover,
-  .contact__mail:focus-visible{color:var(--ink);}
-  .contact__foot{
+  /* footer */
+  .footer{
     display:flex;
     flex-wrap:wrap;
     align-items:center;
@@ -437,25 +391,29 @@
     font-family:var(--mono);
     font-size:12.5px;
     color:var(--ink-soft);
-    margin-top:44px;
+    margin:44px 0 0;
+    padding-bottom:96px;
     padding-top:20px;
     border-top:1px solid var(--line-soft);
     letter-spacing:0.02em;
   }
-  .contact__loc{
+  .footer__loc{
     display:inline-flex;
     align-items:center;
     gap:8px;
     color:var(--ink);
   }
-  .contact__loc::before{
+  .footer__loc::before{
     content:"";
     width:10px;
     height:7px;
     border-radius:50%;
     background:var(--verified);
   }
-  .contact__sep{color:var(--line);}
+  .footer__mail{color:var(--verified-deep);text-decoration:none;border-bottom:1px solid var(--verified);transition:color .18s ease;}
+  .footer__mail:hover,
+  .footer__mail:focus-visible{color:var(--ink);}
+  .footer__sep{color:var(--line);}
 
   a:focus-visible{outline:2px solid var(--verified);outline-offset:3px;border-radius:1px;}
 
@@ -496,7 +454,6 @@
       <a href="#research">Research</a>
       <a href="#experience" class="opt">Experience</a>
       <a href="#education">Education</a>
-      <a href="#contact">Contact</a>
     </div>
   </div>
 </nav>
@@ -529,22 +486,14 @@
     </div>
 
     <article class="entry">
-      <div class="entry__period">Under Submission</div>
+      <div class="entry__period">Forthcoming</div>
       <div>
         <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="false" aria-label="Mark this entry"></button>The Forgotten Paper Record Requirement of the Help America Vote Act</h3>
-        <p class="entry__role">Braden L. Crimmins</p>
+        <p class="entry__role">Braden L. Crimmins <span class="venue">(28 Minnesota Journal of Law, Science &amp; Technology)</span></p>
 	<p class="entry__desc">Explaining that HAVA prohibits use of purely electronic voting systems, including Internet voting, in federal elections.</p>
       </div>
     </article>
 
-    <article class="entry">
-      <div class="entry__period">Under Submission</div>
-      <div>
-        <h3 class="entry__title"><button class="ballot" type="button" aria-pressed="false" aria-label="Mark this entry"></button>AI and the Coming Fourth Amendment Crisis</h3>
-        <p class="entry__role">Braden L. Crimmins</p>
-	<p class="entry__desc">Forecasting substantial challenges for Fourth Amendment doctrine posed by AI investigative tools.</p>
-      </div>
-    </article>
 
     <article class="entry">
       <div class="entry__period">2024</div>
@@ -666,20 +615,13 @@
     </div>
   </section>
 
-  <section class="contact" id="contact">
-    <p class="eyebrow">Contact</p>
-    <h2 class="contact__title">Let's talk.</h2>
-    <p class="contact__sub">Open to research collaboration, writing, and consulting — drop a line and I'll get back to you.</p>
-    <div class="contact__cta">
-      <button class="ballot" type="button" aria-pressed="true" aria-label="Mark this"></button>
-      <a class="contact__mail" href="mailto:bradenlc@umich.edu"><span class="addr">bradenlc@umich.edu</span></a>
-    </div>
-    <p class="contact__foot">
-      <span>Braden L. Crimmins</span>
-      <span class="contact__sep" aria-hidden="true">/</span>
-      <span class="contact__loc">Ann Arbor, Michigan</span>
-    </p>
-  </section>
+  <footer class="footer">
+    <span>Braden L. Crimmins</span>
+    <span class="footer__sep" aria-hidden="true">/</span>
+    <a class="footer__mail" href="mailto:bradenlc@umich.edu">bradenlc@umich.edu</a>
+    <span class="footer__sep" aria-hidden="true">/</span>
+    <span class="footer__loc">Ann Arbor, Michigan</span>
+  </footer>
 
 </main>
 
